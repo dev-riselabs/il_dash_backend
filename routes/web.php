@@ -15,3 +15,8 @@ Route::get('/', function (): JsonResponse {
         ],
     ]);
 });
+
+// Define login route for redirect fallback (API should use /api/auth/login)
+Route::get('/login', function () {
+    return response()->json(['error' => 'Unauthenticated'], 401);
+})->name('login');

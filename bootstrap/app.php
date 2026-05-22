@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Throwable;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -25,5 +26,13 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->respond(function (Throwable $e) {
+            if ($e instanceof \Symfony\Component\Routing\Exception\RouteNotFoundException 
+                && str_contains($e->getMessage(), 'Route [login] not defined')) {
+                return response()->json([
+                    'message' => 'Unauthenticated',
+                    'error' => 'Authentication required',
+                ], 401);
+            }
+        });
     })->create();
