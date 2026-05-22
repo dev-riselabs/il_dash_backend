@@ -25,12 +25,15 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        // Render all exceptions as JSON responses on API routes
-        $exceptions->respond(function ($response, $exception, $request) {
-            // Always return a proper JSON response for API calls
-            return response()->json([
-                'message' => $exception->getMessage(),
-                'error' => class_basename($exception),
-            ], 500);
+        // Report all exceptions
+        $exceptions->report(function (Throwable $e) {
+            if (app()->bound('sentry')) {
+                app('sentry')->captureException($e);
+            }
+        });
+
+        // Only render JSON for API routes - don't interrupt middleware flow
+        $exceptions->shouldRenderJsonWhen(function ($request) {
+            return $request->expectsJson();
         });
     })->create();

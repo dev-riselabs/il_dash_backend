@@ -27,8 +27,8 @@ Route::get('/health', fn () => response()->json([
     'time' => now()->toIso8601String(),
 ]));
 
-// Auth (Sanctum SPA cookie-based) - explicitly ensure proper middleware
-Route::middleware(['api'])->post('/auth/login', [AuthController::class, 'login']);
+// Auth (Sanctum SPA cookie-based) - with api middleware for JSON parsing
+Route::middleware('api')->post('/auth/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/signup-admin', [AuthController::class, 'signupAdmin']);
