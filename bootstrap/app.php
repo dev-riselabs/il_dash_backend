@@ -25,13 +25,12 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->respond(function (Throwable $e) {
-            if ($e instanceof \Symfony\Component\Routing\Exception\RouteNotFoundException 
-                && str_contains($e->getMessage(), 'Route [login] not defined')) {
-                return response()->json([
-                    'message' => 'Unauthenticated',
-                    'error' => 'Authentication required',
-                ], 401);
-            }
+        // Render all exceptions as JSON responses on API routes
+        $exceptions->respond(function ($response, $exception, $request) {
+            // Always return a proper JSON response for API calls
+            return response()->json([
+                'message' => $exception->getMessage(),
+                'error' => class_basename($exception),
+            ], 500);
         });
     })->create();

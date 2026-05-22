@@ -27,12 +27,11 @@ Route::get('/health', fn () => response()->json([
     'time' => now()->toIso8601String(),
 ]));
 
-// Auth (Sanctum SPA cookie-based)
-Route::post('/auth/login', [AuthController::class, 'login']);
-Route::post('/auth/signup-admin', [AuthController::class, 'signupAdmin']);
+// Auth (Sanctum SPA cookie-based) - explicitly ensure proper middleware
+Route::middleware(['api'])->post('/auth/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    // Auth
+    Route::post('/auth/signup-admin', [AuthController::class, 'signupAdmin']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
     Route::get('/auth/me', [AuthController::class, 'me']);
 
