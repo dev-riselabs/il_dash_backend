@@ -11,6 +11,7 @@ return [
         'http://127.0.0.1:5173',
         'https://eventsintel.com',
         'https://www.eventsintel.com',
+        'https://api.eventsintel.com',
     ],
 
     'allowed_origins_patterns' => [],
