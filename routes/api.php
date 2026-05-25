@@ -30,6 +30,7 @@ Route::get('/health', fn () => response()->json([
 
 // Auth (Sanctum SPA cookie-based)
 Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/signup', [AuthController::class, 'signup']);
 Route::post('/auth/signup-admin', [AuthController::class, 'signupAdmin']);
 
 // ============================================================================

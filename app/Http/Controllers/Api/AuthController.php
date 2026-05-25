@@ -56,6 +56,27 @@ class AuthController extends Controller
         ]);
     }
 
+    public function signup(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => 'operator', // Default role for new users
+        ]);
+
+        return response()->json([
+            'message' => 'Account created successfully. Please sign in with your credentials.',
+            'user' => $user->load('roles', 'permissions'),
+        ], 201);
+    }
+
     public function signupAdmin(Request $request): JsonResponse
     {
         // Only super admin can create other admins
