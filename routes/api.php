@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AttendeeController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DealController;
+use App\Http\Controllers\Api\DemoRequestController;
 use App\Http\Controllers\Api\EventSessionController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\IncidentController;
@@ -30,6 +31,13 @@ Route::get('/health', fn () => response()->json([
 // Auth (Sanctum SPA cookie-based)
 Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/signup-admin', [AuthController::class, 'signupAdmin']);
+
+// ============================================================================
+// PUBLIC FORM SUBMISSIONS (NO AUTHENTICATION REQUIRED)
+// ============================================================================
+
+// Demo Request Form
+Route::post('/demo-request', [DemoRequestController::class, 'store']);
 
 // ============================================================================
 // PUBLIC ROUTES - READ-ONLY ACCESS FOR ALL USERS (NO AUTHENTICATION)
@@ -218,4 +226,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Reports - Generate (Admin only)
     Route::post('/reports/generate', [ReportController::class, 'generate']);
+
+    // Demo Requests - Admin Dashboard (Admin only)
+    Route::get('/demo-requests', [DemoRequestController::class, 'index']);
+    Route::get('/demo-requests/stats', [DemoRequestController::class, 'stats']);
+    Route::get('/demo-requests/{demoRequest}', [DemoRequestController::class, 'show']);
 });
