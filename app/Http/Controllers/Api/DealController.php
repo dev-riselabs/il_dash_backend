@@ -71,4 +71,10 @@ class DealController extends Controller
         }
         return response()->json($deal);
     }
+
+    public function destroy(Deal $deal): JsonResponse
+    {
+        $deal->delete();
+        return response()->json(['message' => 'Deal deleted successfully']);
+    }
 }

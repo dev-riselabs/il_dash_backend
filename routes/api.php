@@ -208,6 +208,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/deals', [DealController::class, 'store']);
     Route::patch('/deals/{deal}', [DealController::class, 'update']);
     Route::patch('/deals/{deal}/stage', [DealController::class, 'updateStage']);
+    Route::delete('/deals/{deal}', [DealController::class, 'destroy']);
+
 
     // Incidents - Create, Update (Admin only)
     Route::post('/incidents', [IncidentController::class, 'store']);
