@@ -17,9 +17,12 @@ use App\Http\Controllers\Api\LookupController;
 use App\Http\Controllers\Api\QuoteController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\ResolutionController;
+use App\Http\Controllers\Api\SectorController;
 use App\Http\Controllers\Api\SocialController;
 use App\Http\Controllers\Api\SpeakerController;
+use App\Http\Controllers\Api\TrackController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VenueController;
 use Illuminate\Support\Facades\Route;
 
 // Public health check
@@ -100,6 +103,18 @@ Route::get('/events/{event}', [EventController::class, 'show']);
 // Sessions - Public read only
 Route::get('/sessions', [EventSessionController::class, 'index']);
 Route::get('/sessions/{session}', [EventSessionController::class, 'show']);
+
+// Tracks - Public read only
+Route::get('/tracks', [TrackController::class, 'index']);
+Route::get('/tracks/{track}', [TrackController::class, 'show']);
+
+// Sectors - Public read only
+Route::get('/sectors', [SectorController::class, 'index']);
+Route::get('/sectors/{sector}', [SectorController::class, 'show']);
+
+// Venues - Public read only
+Route::get('/venues', [VenueController::class, 'index']);
+Route::get('/venues/{venue}', [VenueController::class, 'show']);
 
 // Quotes - Public read only
 Route::get('/quotes', [QuoteController::class, 'index']);
@@ -198,6 +213,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/sessions/{session}', [EventSessionController::class, 'update']);
     Route::patch('/sessions/{session}/status', [EventSessionController::class, 'updateStatus']);
     Route::delete('/sessions/{session}', [EventSessionController::class, 'destroy']);
+
+    // Tracks - Create, Update, Delete (Admin only)
+    Route::post('/tracks', [TrackController::class, 'store']);
+    Route::patch('/tracks/{track}', [TrackController::class, 'update']);
+    Route::delete('/tracks/{track}', [TrackController::class, 'destroy']);
+
+    // Sectors - Create, Update, Delete (Admin only)
+    Route::post('/sectors', [SectorController::class, 'store']);
+    Route::patch('/sectors/{sector}', [SectorController::class, 'update']);
+    Route::delete('/sectors/{sector}', [SectorController::class, 'destroy']);
+
+    // Venues - Create, Update, Delete (Admin only)
+    Route::post('/venues', [VenueController::class, 'store']);
+    Route::patch('/venues/{venue}', [VenueController::class, 'update']);
+    Route::delete('/venues/{venue}', [VenueController::class, 'destroy']);
 
     // Quotes - Create, Delete (Admin only)
     Route::post('/quotes', [QuoteController::class, 'store']);
