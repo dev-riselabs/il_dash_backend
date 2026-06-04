@@ -53,6 +53,8 @@ Route::get('/lookups/sectors', [LookupController::class, 'sectors']);
 Route::get('/lookups/venues', [LookupController::class, 'venues']);
 Route::get('/lookups/sessions/options', [LookupController::class, 'sessionOptions']);
 Route::get('/lookups/owners', [LookupController::class, 'owners']);
+Route::get('/lookups/countries', [LookupController::class, 'countries']);
+Route::get('/lookups/job-titles', [LookupController::class, 'jobTitles']);
 
 // Dashboard aggregators (Overview / Executive / Command Center / Programme / Intelligence) - Public read
 Route::get('/overview/kpis', [DashboardController::class, 'overviewKpis']);
