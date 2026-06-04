@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DealController;
 use App\Http\Controllers\Api\DemoRequestController;
+use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\EventSessionController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\IncidentController;
@@ -89,6 +90,10 @@ Route::get('/attendees/{attendee}', [AttendeeController::class, 'show']);
 Route::get('/speakers', [SpeakerController::class, 'index']);
 Route::get('/speakers/top-engagement', [SpeakerController::class, 'topEngagement']);
 Route::get('/speakers/{speaker}', [SpeakerController::class, 'show']);
+
+// Events - Public read only
+Route::get('/events', [EventController::class, 'index']);
+Route::get('/events/{event}', [EventController::class, 'show']);
 
 // Sessions - Public read only
 Route::get('/sessions', [EventSessionController::class, 'index']);
@@ -180,6 +185,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/speakers', [SpeakerController::class, 'store']);
     Route::patch('/speakers/{speaker}', [SpeakerController::class, 'update']);
     Route::delete('/speakers/{speaker}', [SpeakerController::class, 'destroy']);
+
+    // Events - Create, Update, Delete (Admin only)
+    Route::post('/events', [EventController::class, 'store']);
+    Route::patch('/events/{event}', [EventController::class, 'update']);
+    Route::delete('/events/{event}', [EventController::class, 'destroy']);
 
     // Sessions - Create, Update, Delete (Admin only)
     Route::post('/sessions', [EventSessionController::class, 'store']);
