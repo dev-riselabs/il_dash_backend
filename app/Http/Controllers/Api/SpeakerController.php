@@ -32,18 +32,17 @@ class SpeakerController extends Controller
         $data = $request->validate([
             'first_name' => ['required', 'string', 'max:120'],
             'last_name' => ['required', 'string', 'max:120'],
-            'email' => ['nullable', 'email'],
             'organization' => ['nullable', 'string', 'max:160'],
             'job_title' => ['nullable', 'string', 'max:160'],
             'bio' => ['nullable', 'string'],
             'photo_url' => ['nullable', 'string', 'max:512'],
             'country' => ['nullable', 'string', 'max:80'],
             'session_id' => ['nullable', 'integer', 'exists:event_sessions,id'],
-            'role' => ['nullable', 'in:keynote,panelist,moderator'],
+            'role' => ['nullable', 'string', 'max:100'],
         ]);
 
         $sessionId = $data['session_id'] ?? null;
-        $role = $data['role'] ?? 'panelist';
+        $role = $data['role'] ?? null;
         
         unset($data['session_id'], $data['role']);
 
@@ -67,7 +66,6 @@ class SpeakerController extends Controller
         $data = $request->validate([
             'first_name' => ['sometimes', 'string', 'max:120'],
             'last_name' => ['sometimes', 'string', 'max:120'],
-            'email' => ['nullable', 'email'],
             'organization' => ['nullable', 'string', 'max:160'],
             'job_title' => ['nullable', 'string', 'max:160'],
             'bio' => ['nullable', 'string'],
