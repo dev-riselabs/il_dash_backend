@@ -48,6 +48,11 @@ class EventSessionController extends Controller
         $speakerIds = $data['speaker_ids'] ?? [];
         unset($data['speaker_ids']);
 
+        // Set default status to 'upcoming' if not provided
+        if (!isset($data['status']) || $data['status'] === null) {
+            $data['status'] = 'upcoming';
+        }
+
         $session = EventSession::create($data);
         if ($speakerIds) {
             $session->speakers()->sync($speakerIds);
