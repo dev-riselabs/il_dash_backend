@@ -35,17 +35,13 @@ class DashboardController extends Controller
             $base = EventSession::with(['track:id,name', 'venue:id,name'])->orderBy('starts_at');
             
             $live = (clone $base)->where('status', 'live')->get();
-            $next = (clone $base)->where('status', 'next')->limit(3)->get();
+            $upcoming = (clone $base)->where('status', 'upcoming')->limit(3)->get();
             $completed = (clone $base)->where('status', 'completed')->orderByDesc('ends_at')->limit(3)->get();
-            $upcoming = (clone $base)->where(function ($query) {
-                $query->where('status', 'upcoming')->orWhereNull('status');
-            })->limit(5)->get();
             
             return response()->json([
                 'live' => $live,
-                'next' => $next,
-                'completed' => $completed,
                 'upcoming' => $upcoming,
+                'completed' => $completed,
             ]);
         } catch (\Exception $e) {
             \Log::error('programmeFlow error: ' . $e->getMessage());

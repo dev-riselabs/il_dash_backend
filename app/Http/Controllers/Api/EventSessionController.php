@@ -78,6 +78,7 @@ class EventSessionController extends Controller
             'venue_id' => ['nullable', 'exists:venues,id'],
             'sector_id' => ['nullable', 'exists:sectors,id'],
             'type' => ['sometimes', 'in:plenary,panel,keynote,roundtable,showcase'],
+            'status' => ['nullable', 'in:upcoming,next,live,completed,cancelled,delayed'],
             'starts_at' => ['sometimes', 'date'],
             'ends_at' => ['sometimes', 'date'],
             'ai_summary' => ['nullable', 'string'],
