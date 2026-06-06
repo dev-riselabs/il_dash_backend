@@ -31,14 +31,20 @@ class DashboardController extends Controller
 
     public function programmeFlow(): JsonResponse
     {
-        $base = EventSession::with(['track:id,name', 'venue:id,name', 'event:id,title'])->orderBy('starts_at');
+        $base = EventSession::with(['track:id,name', 'venue:id,name'])->orderBy('starts_at');
+        
+        $live = (clone $base)->where('status', 'live')->get();
+        $next = (clone $base)->where('status', 'next')->limit(3)->get();
+        $completed = (clone $base)->where('status', 'completed')->orderByDesc('ends_at')->limit(3)->get();
+        $upcoming = (clone $base)->where(function ($query) {
+            $query->where('status', 'upcoming')->orWhereNull('status');
+        })->limit(5)->get();
+        
         return response()->json([
-            'live' => (clone $base)->where('status', 'live')->get(),
-            'next' => (clone $base)->where('status', 'next')->limit(3)->get(),
-            'completed' => (clone $base)->where('status', 'completed')->orderByDesc('ends_at')->limit(3)->get(),
-            'upcoming' => (clone $base)->where(function ($q) {
-                $q->where('status', 'upcoming')->orWhereNull('status');
-            })->limit(5)->get(),
+            'live' => $live,
+            'next' => $next,
+            'completed' => $completed,
+            'upcoming' => $upcoming,
         ]);
     }
 
