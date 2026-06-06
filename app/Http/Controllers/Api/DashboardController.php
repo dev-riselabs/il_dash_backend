@@ -22,7 +22,7 @@ class DashboardController extends Controller
     public function overviewKpis(): JsonResponse
     {
         return response()->json([
-            'total_attendance' => Attendee::whereNotNull('checked_in_at')->count(),
+            'total_attendance' => Attendee::count(),
             'speakers_count' => Speaker::count(),
             'active_deals' => Deal::whereIn('stage', ['discussion', 'negotiation', 'commitment'])->count(),
             'resolutions_today' => Resolution::whereDate('recorded_at', today())->count(),

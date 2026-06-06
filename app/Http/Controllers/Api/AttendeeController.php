@@ -28,6 +28,16 @@ class AttendeeController extends Controller
             }
         }
 
+        // Filter by checked_in status if provided
+        if ($request->has('checked_in')) {
+            $checkedIn = $request->boolean('checked_in');
+            if ($checkedIn) {
+                $q->whereNotNull('checked_in_at');
+            } else {
+                $q->whereNull('checked_in_at');
+            }
+        }
+
         $perPage = (int) $request->integer('per_page', 25);
         return response()->json($q->orderByDesc('created_at')->paginate($perPage));
     }
