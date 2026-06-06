@@ -11,26 +11,16 @@ class Deal extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'investor_id', 'sector_id', 'stage',
-        'value_naira', 'owner_id', 'opened_at',
+        'title', 'investor_name', 'sector_id', 'stage',
+        'value_naira', 'opened_at',
     ];
 
     protected $casts = [
         'opened_at' => 'datetime',
     ];
 
-    public function investor(): BelongsTo
-    {
-        return $this->belongsTo(Investor::class);
-    }
-
     public function sector(): BelongsTo
     {
         return $this->belongsTo(Sector::class);
-    }
-
-    public function owner(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'owner_id');
     }
 }

@@ -12,8 +12,8 @@ class DealController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $q = Deal::with(['investor:id,name,logo_url', 'sector:id,name,color', 'owner:id,name']);
-        foreach (['stage', 'sector_id', 'investor_id', 'owner_id'] as $f) {
+        $q = Deal::with(['sector:id,name,color']);
+        foreach (['stage', 'sector_id'] as $f) {
             if ($v = $request->input($f)) {
                 $q->where($f, $v);
             }
@@ -26,11 +26,10 @@ class DealController extends Controller
     {
         $data = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'investor_id' => ['nullable', 'exists:investors,id'],
+            'investor_name' => ['nullable', 'string', 'max:255'],
             'sector_id' => ['nullable', 'exists:sectors,id'],
             'stage' => ['nullable', 'in:discussion,negotiation,commitment,closed_won,closed_lost'],
             'value_naira' => ['nullable', 'integer', 'min:0'],
-            'owner_id' => ['nullable', 'exists:users,id'],
         ]);
         $data['opened_at'] = $data['opened_at'] ?? now();
         return response()->json(Deal::create($data), 201);
@@ -38,18 +37,17 @@ class DealController extends Controller
 
     public function show(Deal $deal): JsonResponse
     {
-        return response()->json($deal->load(['investor', 'sector', 'owner']));
+        return response()->json($deal->load(['sector']));
     }
 
     public function update(Request $request, Deal $deal): JsonResponse
     {
         $data = $request->validate([
             'title' => ['sometimes', 'string', 'max:255'],
-            'investor_id' => ['nullable', 'exists:investors,id'],
+            'investor_name' => ['nullable', 'string', 'max:255'],
             'sector_id' => ['nullable', 'exists:sectors,id'],
             'stage' => ['sometimes', 'in:discussion,negotiation,commitment,closed_won,closed_lost'],
             'value_naira' => ['nullable', 'integer', 'min:0'],
-            'owner_id' => ['nullable', 'exists:users,id'],
         ]);
         $stageChanged = array_key_exists('stage', $data) && $data['stage'] !== $deal->stage;
         $deal->update($data);

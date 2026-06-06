@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\DealController;
 use App\Http\Controllers\Api\DemoRequestController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\EventDayController;
 use App\Http\Controllers\Api\EventSessionController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\IncidentController;
@@ -43,6 +44,13 @@ Route::post('/auth/signup-admin', [AuthController::class, 'signupAdmin']);
 
 // Demo Request Form
 Route::post('/demo-request', [DemoRequestController::class, 'store']);
+
+// Feedback Submission
+Route::post('/feedback', [FeedbackController::class, 'store']);
+
+// Attendance Check-in / Check-out
+Route::post('/attendees/{attendee}/check-in', [AttendeeController::class, 'checkIn']);
+Route::post('/attendees/{attendee}/check-out', [AttendeeController::class, 'checkOut']);
 
 // ============================================================================
 // PUBLIC ROUTES - READ-ONLY ACCESS FOR ALL USERS (NO AUTHENTICATION)
@@ -195,8 +203,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/attendees', [AttendeeController::class, 'store']);
     Route::patch('/attendees/{attendee}', [AttendeeController::class, 'update']);
     Route::delete('/attendees/{attendee}', [AttendeeController::class, 'destroy']);
-    Route::post('/attendees/{attendee}/check-in', [AttendeeController::class, 'checkIn']);
-    Route::post('/attendees/{attendee}/check-out', [AttendeeController::class, 'checkOut']);
 
     // Speakers - Create, Update, Delete (Admin only)
     Route::post('/speakers', [SpeakerController::class, 'store']);
@@ -207,6 +213,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/events', [EventController::class, 'store']);
     Route::patch('/events/{event}', [EventController::class, 'update']);
     Route::delete('/events/{event}', [EventController::class, 'destroy']);
+
+    // Event Days - Create, Update, Delete (Admin only)
+    Route::get('/event-days', [EventDayController::class, 'index']);
+    Route::post('/event-days', [EventDayController::class, 'store']);
+    Route::patch('/event-days/{eventDay}', [EventDayController::class, 'update']);
+    Route::delete('/event-days/{eventDay}', [EventDayController::class, 'destroy']);
 
     // Sessions - Create, Update, Delete (Admin only)
     Route::post('/sessions', [EventSessionController::class, 'store']);
@@ -233,8 +245,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/quotes', [QuoteController::class, 'store']);
     Route::delete('/quotes/{quote}', [QuoteController::class, 'destroy']);
 
-    // Feedback - Create, Update, Delete (Admin only)
-    Route::post('/feedback', [FeedbackController::class, 'store']);
+    // Feedback - Update, Delete (Admin only)
     Route::patch('/feedback/{feedback}', [FeedbackController::class, 'update']);
     Route::delete('/feedback/{feedback}', [FeedbackController::class, 'destroy']);
 
