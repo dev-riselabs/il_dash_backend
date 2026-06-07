@@ -19,6 +19,7 @@ use App\Http\Controllers\Api\QuoteController;
 use App\Http\Controllers\Api\ReportController;
 use App\Http\Controllers\Api\ResolutionController;
 use App\Http\Controllers\Api\SectorController;
+use App\Http\Controllers\Api\SessionInsightController;
 use App\Http\Controllers\Api\SocialController;
 use App\Http\Controllers\Api\SpeakerController;
 use App\Http\Controllers\Api\TrackController;
@@ -126,6 +127,11 @@ Route::get('/venues/{venue}', [VenueController::class, 'show']);
 
 // Quotes - Public read only
 Route::get('/quotes', [QuoteController::class, 'index']);
+Route::get('/quotes/{quote}', [QuoteController::class, 'show']);
+
+// Session Insights - Public read only
+Route::get('/session-insights', [SessionInsightController::class, 'index']);
+Route::get('/session-insights/{insight}', [SessionInsightController::class, 'show']);
 
 // Feedback - Public read only
 Route::get('/feedback/kpis', [FeedbackController::class, 'kpis']);
@@ -217,6 +223,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Event Days - Create, Update, Delete (Admin only)
     Route::get('/event-days', [EventDayController::class, 'index']);
     Route::post('/event-days', [EventDayController::class, 'store']);
+    Route::get('/event-days/{eventDay}', [EventDayController::class, 'show']);
     Route::patch('/event-days/{eventDay}', [EventDayController::class, 'update']);
     Route::delete('/event-days/{eventDay}', [EventDayController::class, 'destroy']);
 
@@ -241,9 +248,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/venues/{venue}', [VenueController::class, 'update']);
     Route::delete('/venues/{venue}', [VenueController::class, 'destroy']);
 
-    // Quotes - Create, Delete (Admin only)
+    // Quotes - Create, Update, Delete (Admin only)
     Route::post('/quotes', [QuoteController::class, 'store']);
+    Route::patch('/quotes/{quote}', [QuoteController::class, 'update']);
     Route::delete('/quotes/{quote}', [QuoteController::class, 'destroy']);
+
+    // Session Insights - Create, Update, Delete (Admin only)
+    Route::post('/session-insights', [SessionInsightController::class, 'store']);
+    Route::patch('/session-insights/{insight}', [SessionInsightController::class, 'update']);
+    Route::delete('/session-insights/{insight}', [SessionInsightController::class, 'destroy']);
 
     // Feedback - Update, Delete (Admin only)
     Route::patch('/feedback/{feedback}', [FeedbackController::class, 'update']);

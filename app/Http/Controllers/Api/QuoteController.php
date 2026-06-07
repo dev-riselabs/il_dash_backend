@@ -35,6 +35,22 @@ class QuoteController extends Controller
         return response()->json(SessionQuote::create($data), 201);
     }
 
+    public function show(SessionQuote $quote): JsonResponse
+    {
+        return response()->json($quote->load(['session:id,title', 'speaker:id,first_name,last_name']));
+    }
+
+    public function update(Request $request, SessionQuote $quote): JsonResponse
+    {
+        $data = $request->validate([
+            'speaker_id' => ['nullable', 'exists:speakers,id'],
+            'quote_text' => ['sometimes', 'string'],
+            'said_at' => ['sometimes', 'date'],
+        ]);
+        $quote->update($data);
+        return response()->json($quote);
+    }
+
     public function destroy(SessionQuote $quote): JsonResponse
     {
         $quote->delete();

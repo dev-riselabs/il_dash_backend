@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Add CORS middleware FIRST - before all other middleware
+        $middleware->prepend(\App\Http\Middleware\CorsMiddleware::class);
+
         // Sanctum SPA stateful middleware for the React frontend (cookie-based auth)
         $middleware->statefulApi();
 
