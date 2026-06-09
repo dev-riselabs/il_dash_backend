@@ -37,20 +37,18 @@ class SpeakerController extends Controller
             'bio' => ['nullable', 'string'],
             'photo_url' => ['nullable', 'string', 'max:512'],
             'country' => ['nullable', 'string', 'max:80'],
-            'session_id' => ['nullable', 'integer', 'exists:event_sessions,id'],
-            'role' => ['nullable', 'string', 'max:100'],
+            'session_ids' => ['nullable', 'array'],
+            'session_ids.*' => ['integer', 'exists:event_sessions,id'],
         ]);
 
-        $sessionId = $data['session_id'] ?? null;
-        $role = $data['role'] ?? null;
-        
-        unset($data['session_id'], $data['role']);
+        $sessionIds = $data['session_ids'] ?? [];
+        unset($data['session_ids']);
 
         $speaker = Speaker::create($data);
 
-        // Attach speaker to session if session_id provided
-        if ($sessionId) {
-            $speaker->sessions()->attach($sessionId, ['role' => $role]);
+        // Attach speaker to multiple sessions if session_ids provided
+        if ($sessionIds) {
+            $speaker->sessions()->sync($sessionIds);
         }
 
         return response()->json($speaker->load('sessions:id,title,starts_at'), 201);
@@ -71,10 +69,19 @@ class SpeakerController extends Controller
             'bio' => ['nullable', 'string'],
             'photo_url' => ['nullable', 'string', 'max:512'],
             'country' => ['nullable', 'string', 'max:80'],
+            'session_ids' => ['nullable', 'array'],
+            'session_ids.*' => ['integer', 'exists:event_sessions,id'],
         ]);
 
-        $speaker->update($data);
-        return response()->json($speaker);
+        $speakerData = collect($data)->except(['session_ids'])->toArray();
+        $speaker->update($speakerData);
+
+        // Sync sessions if provided (sync removes old, adds new)
+        if (array_key_exists('session_ids', $data)) {
+            $speaker->sessions()->sync($data['session_ids']);
+        }
+
+        return response()->json($speaker->load('sessions:id,title,starts_at'));
     }
 
     public function destroy(Speaker $speaker): JsonResponse
