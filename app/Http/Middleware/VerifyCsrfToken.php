@@ -12,12 +12,6 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        'api/demo-request', // Public demo form - CSRF not required for public submissions
-        'api/attendees', // Public attendee registration form
-        'api/speakers', // Public speaker registration form
-        'api/sessions', // Public session registration form
-        'api/feedback', // Public feedback submission form
-        'api/attendees/*/check-in', // Public check-in
-        'api/attendees/*/check-out', // Public check-out
+        'api/*', // Skip CSRF for all API routes - use token-based or stateless auth instead
     ];
 }
