@@ -53,6 +53,11 @@ Route::post('/feedback', [FeedbackController::class, 'store']);
 Route::post('/attendees/{attendee}/check-in', [AttendeeController::class, 'checkIn']);
 Route::post('/attendees/{attendee}/check-out', [AttendeeController::class, 'checkOut']);
 
+// Public Form Submissions - Attendee, Speaker, Session Registration
+Route::post('/attendees', [AttendeeController::class, 'store']);
+Route::post('/speakers', [SpeakerController::class, 'store']);
+Route::post('/sessions', [EventSessionController::class, 'store']);
+
 // ============================================================================
 // PUBLIC ROUTES - READ-ONLY ACCESS FOR ALL USERS (NO AUTHENTICATION)
 // ============================================================================
@@ -205,13 +210,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/users/{user}', [UserController::class, 'destroy']);
     Route::patch('/users/{user}/role', [UserController::class, 'changeRole']);
 
-    // Attendees - Create, Update, Delete (Admin only)
-    Route::post('/attendees', [AttendeeController::class, 'store']);
+    // Attendees - Update, Delete (Admin only)
     Route::patch('/attendees/{attendee}', [AttendeeController::class, 'update']);
     Route::delete('/attendees/{attendee}', [AttendeeController::class, 'destroy']);
 
-    // Speakers - Create, Update, Delete (Admin only)
-    Route::post('/speakers', [SpeakerController::class, 'store']);
+    // Speakers - Update, Delete (Admin only)
     Route::patch('/speakers/{speaker}', [SpeakerController::class, 'update']);
     Route::delete('/speakers/{speaker}', [SpeakerController::class, 'destroy']);
 
@@ -227,8 +230,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::patch('/event-days/{eventDay}', [EventDayController::class, 'update']);
     Route::delete('/event-days/{eventDay}', [EventDayController::class, 'destroy']);
 
-    // Sessions - Create, Update, Delete (Admin only)
-    Route::post('/sessions', [EventSessionController::class, 'store']);
+    // Sessions - Update, Delete (Admin only)
     Route::patch('/sessions/{session}', [EventSessionController::class, 'update']);
     Route::patch('/sessions/{session}/status', [EventSessionController::class, 'updateStatus']);
     Route::delete('/sessions/{session}', [EventSessionController::class, 'destroy']);
